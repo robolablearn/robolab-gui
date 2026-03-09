@@ -114,6 +114,7 @@ const GUIComponent = props => {
         onClickUpdate,
         onClickClearCache,
         onClickInstallDriver,
+        onClickDownloadTools,
         onExtensionButtonClick,
         onProjectTelemetryEvent,
         onRequestCloseBackdropLibrary,
@@ -275,6 +276,7 @@ const GUIComponent = props => {
                     onClickCheckUpdate={onClickCheckUpdate}
                     onClickClearCache={onClickClearCache}
                     onClickInstallDriver={onClickInstallDriver}
+                    onClickDownloadTools={onClickDownloadTools}
                 />
                 <Box className={styles.bodyWrapper}>
                     <Box className={styles.flexWrapper}>
@@ -468,6 +470,7 @@ GUIComponent.propTypes = {
     onClickUpdate: PropTypes.func,
     onClickClearCache: PropTypes.func,
     onClickInstallDriver: PropTypes.func,
+    onClickDownloadTools: PropTypes.func,
     onCloseAccountNav: PropTypes.func,
     onExtensionButtonClick: PropTypes.func,
     onLogOut: PropTypes.func,

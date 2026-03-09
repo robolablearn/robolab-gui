@@ -95,8 +95,8 @@ import wikiIcon from './icon--wiki.svg';
 import fileIcon from './icon--file.svg';
 import editIcon from './icon--edit.svg';
 
-import openblockLogo from './openblock-logo.svg';
-import openblockLogoSmall from './openblock-logo-small.svg';
+import openblockLogo from './Robolab_logo.svg';
+import openblockLogoSmall from './Robolab_logo.svg';
 
 import sharedMessages from '../../lib/shared-messages';
 
@@ -349,10 +349,10 @@ class MenuBar extends React.Component {
         }
     }
     handleClickOpenCommunity () {
-        window.open('https://community.openblock.cc');
+        window.open('https://www.robolablearn.com');
     }
     handleClickOpenWiki () {
-        window.open('https://wiki.openblock.cc');
+        window.open('https://www.robolablearn.com');
     }
     restoreOptionMessage (deletedItem) {
         switch (deletedItem) {
@@ -537,6 +537,13 @@ class MenuBar extends React.Component {
                 defaultMessage="Clear cache and restart"
                 description="Menu bar item for clear cache and restart"
                 id="gui.menuBar.clearCacheAndRestart"
+            />
+        );
+        const downloadTools = (
+            <FormattedMessage
+                defaultMessage="Download Tools"
+                description="Menu bar item for downloading MIEO and other tools"
+                id="gui.menuBar.downloadTools"
             />
         );
         // eslint-disable-next-line no-unused-vars
@@ -935,6 +942,12 @@ class MenuBar extends React.Component {
                                     >
                                         {installDriver}
                                     </MenuItem>
+                                    <MenuItem
+                                        isRtl={this.props.isRtl}
+                                        onClick={this.props.onClickDownloadTools}
+                                    >
+                                        {downloadTools}
+                                    </MenuItem>
                                 </MenuSection>
                                 <MenuSection>
                                     {typeof this.props.onClickAbout === 'object' ? aboutButton : null}
@@ -988,7 +1001,7 @@ MenuBar.propTypes = {
         PropTypes.func, // button mode: call this callback when the About button is clicked
         PropTypes.arrayOf( // menu mode: list of items in the About menu
             PropTypes.shape({
-                title: PropTypes.string, // text for the menu item
+                title: PropTypes.oneOfType([PropTypes.string, PropTypes.node]), // text for the menu item
                 onClick: PropTypes.func // call this callback when the menu item is clicked
             })
         )
@@ -1007,6 +1020,7 @@ MenuBar.propTypes = {
     onClickCheckUpdate: PropTypes.func,
     onClickClearCache: PropTypes.func,
     onClickInstallDriver: PropTypes.func,
+    onClickDownloadTools: PropTypes.func,
     onLogOut: PropTypes.func,
     onNoPeripheralIsConnected: PropTypes.func.isRequired,
     onOpenRegistration: PropTypes.func,

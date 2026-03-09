@@ -13,6 +13,7 @@ import {makeDeviceLibrary} from '../lib/libraries/devices/index.jsx';
 
 import LibraryComponent from '../components/library/library.jsx';
 import deviceIcon from '../components/action-menu/icon--sprite.svg';
+import libraryStyles from '../components/library/library.css';
 
 const messages = defineMessages({
     deviceTitle: {
@@ -99,18 +100,38 @@ class DeviceLibrary extends React.PureComponent {
     }
 
     render () {
-        const deviceLibraryThumbnailData = this.props.deviceData.map(device => ({
+        const orderedDeviceIds = [
+            'mieo',
+            'arduinoUno',
+            'arduinoNano',
+            'arduinoMega2560',
+            'arduinoEsp32',
+            'arduinoEsp8266NodeMCU',
+            'microbit',
+            'microbitV2',
+            'null'
+        ];
+        const deviceMap = new Map(this.props.deviceData.map(device => [device.deviceId, device]));
+        const orderedDevices = orderedDeviceIds
+            .map(deviceId => deviceMap.get(deviceId))
+            .filter(Boolean);
+
+        const deviceLibraryThumbnailData = orderedDevices.map(device => ({
             rawURL: device.iconURL || deviceIcon,
-            ...device
+            ...device,
+            featured: false
         }));
 
         return (
             <LibraryComponent
                 data={deviceLibraryThumbnailData}
-                filterable
-                tags={tagListPrefix}
+                filterable={false}
+                tags={null}
                 id="deviceLibrary"
                 title={this.props.intl.formatMessage(messages.deviceTitle)}
+                gridClassName={libraryStyles.deviceLibraryGrid}
+                modalClassName={libraryStyles.deviceLibraryModal}
+                fullScreen={false}
                 onItemSelected={this.handleItemSelect}
                 onRequestClose={this.props.onRequestClose}
             />

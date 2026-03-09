@@ -219,7 +219,8 @@ class LibraryComponent extends React.Component {
     render () {
         return (
             <Modal
-                fullScreen
+                className={this.props.modalClassName}
+                fullScreen={this.props.fullScreen}
                 contentLabel={this.props.title}
                 id={this.props.id}
                 onRequestClose={this.handleClose}
@@ -262,7 +263,7 @@ class LibraryComponent extends React.Component {
                     </div>
                 )}
                 <div
-                    className={classNames(styles.libraryScrollGrid, {
+                    className={classNames(styles.libraryScrollGrid, this.props.gridClassName, {
                         [styles.withFilterBar]: this.props.filterable || this.props.tags
                     })}
                     ref={this.setFilteredDataRef}
@@ -334,9 +335,12 @@ LibraryComponent.propTypes = {
         /* eslint-enable react/no-unused-prop-types, lines-around-comment */
     ),
     filterable: PropTypes.bool,
+    gridClassName: PropTypes.string,
     id: PropTypes.string.isRequired,
     intl: intlShape.isRequired,
     isUnloadble: PropTypes.bool,
+    modalClassName: PropTypes.string,
+    fullScreen: PropTypes.bool,
     onItemMouseEnter: PropTypes.func,
     onItemMouseLeave: PropTypes.func,
     onItemSelected: PropTypes.func,
@@ -351,6 +355,7 @@ LibraryComponent.defaultProps = {
     autoClose: true,
     isUnloadble: false,
     filterable: true,
+    fullScreen: true,
     showPlayButton: false
 };
 

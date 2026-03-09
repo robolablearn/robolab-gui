@@ -19,6 +19,21 @@
     height: calc(100% - $library-header-height - $library-filter-bar-height - 2rem);
 }
 
+.device-library-grid {
+    display: grid;
+    justify-content: center;
+    justify-items: center;
+    align-content: flex-start;
+    grid-template-columns: repeat(3, 200px);
+    grid-auto-rows: 240px;
+    gap: 1rem;
+}
+
+.device-library-modal {
+    width: 700px;
+    max-width: 90vw;
+}
+
 .filter-bar {
     display: flex;
     flex-direction: row;

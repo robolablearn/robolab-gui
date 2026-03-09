@@ -7,6 +7,11 @@ let messages = defineMessages({
         description: 'Name for the chirp sound',
         id: 'gui.defaultProject.chirp'
     },
+    meow: {
+        defaultMessage: 'Meow',
+        description: 'Name for the meow sound',
+        id: 'gui.defaultProject.meow'
+    },
     variable: {
         defaultMessage: 'my variable',
         description: 'Name for the default variable',
@@ -61,7 +66,7 @@ const projectData = translateFunction => {
             },
             {
                 isStage: false,
-                name: translator(messages.sprite, {index: 1}),
+                name: 'roby',
                 variables: {},
                 lists: {},
                 broadcasts: {},
@@ -69,33 +74,33 @@ const projectData = translateFunction => {
                 currentCostume: 0,
                 costumes: [
                     {
-                        assetId: '5de48e72637db4d7fc7f6bb526354114',
+                        assetId: 'bcf454acf82e4504149f7ffe07081dbc',
                         name: translator(messages.costume, {index: 1}),
                         bitmapResolution: 1,
-                        md5ext: '5de48e72637db4d7fc7f6bb526354114.svg',
+                        md5ext: 'bcf454acf82e4504149f7ffe07081dbc.svg',
                         dataFormat: 'svg',
-                        rotationCenterX: 93,
-                        rotationCenterY: 80
+                        rotationCenterX: 48,
+                        rotationCenterY: 50
                     },
                     {
-                        assetId: '48bbc82a10af3d0e0b7d5c677097df0e',
+                        assetId: '0fb9be3e8397c983338cb71dc84d0b25',
                         name: translator(messages.costume, {index: 2}),
                         bitmapResolution: 1,
-                        md5ext: '48bbc82a10af3d0e0b7d5c677097df0e.svg',
+                        md5ext: '0fb9be3e8397c983338cb71dc84d0b25.svg',
                         dataFormat: 'svg',
-                        rotationCenterX: 93,
-                        rotationCenterY: 80
+                        rotationCenterX: 46,
+                        rotationCenterY: 53
                     }
                 ],
                 sounds: [
                     {
-                        assetId: '4e080acae1c3dc65eef30f07c2b0d4a5',
-                        name: translator(messages.chirp),
+                        assetId: '83c36d806dc92327b9e7049a565c6bff',
+                        name: translator(messages.meow),
                         dataFormat: 'wav',
                         format: '',
-                        rate: 22050,
-                        sampleCount: 18688,
-                        md5ext: '4e080acae1c3dc65eef30f07c2b0d4a5.wav'
+                        rate: 44100,
+                        sampleCount: 37376,
+                        md5ext: '83c36d806dc92327b9e7049a565c6bff.wav'
                     }
                 ],
                 volume: 100,

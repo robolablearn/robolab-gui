@@ -31,6 +31,10 @@ import arduinoUnoR4WifiIconURL from './arduinoUnoR4Wifi/arduinoUnoR4Wifi.png';
 import arduinoUnoR4WifiConnectionIconURLL from './arduinoUnoR4Wifi/arduinoUnoR4Wifi-illustration.svg';
 import arduinoUnoR4WifiConnectionSmallIconURL from './arduinoUnoR4Wifi/arduinoUnoR4Wifi-small.svg';
 
+import mieoIconURL from './mieo/mieo.png';
+import mieoConnectionIconURL from './mieo/mieo-illustration.svg';
+import mieoConnectionSmallIconURL from './mieo/mieo-small.svg';
+
 import microbitIconURL from './microbit/microbit.png';
 import microbitConnectionIconURLL from './microbit/microbit-illustration.svg';
 import microbitConnectionSmallIconURL from './microbit/microbit-small.svg';
@@ -140,6 +144,42 @@ const deviceData = [
         programLanguage: ['block', 'c', 'cpp'],
         tags: ['arduino'],
         helpLink: 'https://wiki.openblock.cc/general-hardware-guidelines/boards/arduino-uno'
+    },
+    {
+        name: 'Mieo',
+        deviceId: 'mieo',
+        manufactor: 'your-manufacturer',
+        learnMore: 'https://your-device-docs-link',
+        type: DeviceType.arduino,
+        iconURL: mieoIconURL,
+        description: (
+            <FormattedMessage
+                defaultMessage="A custom Arduino-compatible board."
+                description="Description for the Mieo device"
+                id="gui.device.mieo.description"
+            />
+        ),
+        featured: true,
+        disabled: false,
+        bluetoothRequired: false,
+        serialportRequired: true,
+        defaultBaudRate: '9600',
+        internetConnectionRequired: false,
+        launchPeripheralConnectionFlow: true,
+        useAutoScan: false,
+        connectionIconURL: mieoConnectionIconURL,
+        connectionSmallIconURL: mieoConnectionSmallIconURL,
+        connectingMessage: (
+            <FormattedMessage
+                defaultMessage="Connecting"
+                description="Message to help people connect to their device."
+                id="gui.device.connectingMessage"
+            />
+        ),
+        programMode: ['realtime', 'upload'],
+        programLanguage: ['block', 'c', 'cpp'],
+        tags: ['arduino'],
+        helpLink: 'https://your-device-help-link'
     },
     {
         name: 'Arduino Nano',

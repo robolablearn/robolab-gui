@@ -774,20 +774,31 @@ const makeToolboxXML = function (isInitialSetup, device = null, isStage = true, 
     const myBlocksXML = moveCategory('procedures') || myBlocks(isInitialSetup, isStage, targetId);
 
     if (device && !isRealtimeMode) {
-        eventsXML = `
+        const deviceEventBlock = (device.deviceId === 'mieo') ? '' : eventBlock[device.type];
+        if (deviceEventBlock) {
+            eventsXML = `
         <category name="%{BKY_CATEGORY_EVENTS}" id="events" colour="#FFD500" secondaryColour="#CC9900">
-            ${eventBlock[device.type]}
+            ${deviceEventBlock}
             ${categorySeparator}
         </category>
     `;
-        everything.push(
-            xmlOpen,
-            eventsXML, gap,
-            controlXML, gap,
-            operatorsXML, gap,
-            variablesXML, gap,
-            myBlocksXML
-        );
+            everything.push(
+                xmlOpen,
+                eventsXML, gap,
+                controlXML, gap,
+                operatorsXML, gap,
+                variablesXML, gap,
+                myBlocksXML
+            );
+        } else {
+            everything.push(
+                xmlOpen,
+                controlXML, gap,
+                operatorsXML, gap,
+                variablesXML, gap,
+                myBlocksXML
+            );
+        }
     } else {
         everything.push(
             xmlOpen,
