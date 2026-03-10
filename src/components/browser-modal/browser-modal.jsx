@@ -43,11 +43,11 @@ const BrowserModal = ({intl, ...props}) => {
                         { /* eslint-disable max-len */ }
                         {
                             props.error ? <FormattedMessage
-                                defaultMessage="We are very sorry, but it looks like you are using a browser version that OpenBlock does not support. We recommend updating to the latest version of a supported browser such as Google Chrome, Mozilla Firefox, Microsoft Edge, or Apple Safari. "
+                                defaultMessage="We are very sorry, but it looks like you are using a browser version that Robolab does not support. We recommend updating to the latest version of a supported browser such as Google Chrome, Mozilla Firefox, Microsoft Edge, or Apple Safari. "
                                 description="Error message when the browser does not meet our minimum requirements"
                                 id="gui.unsupportedBrowser.notRecommended"
                             /> : <FormattedMessage
-                                defaultMessage="We are very sorry, but OpenBlock does not support this browser. We recommend updating to the latest version of a supported browser such as Google Chrome, Mozilla Firefox, Microsoft Edge, or Apple Safari."
+                                defaultMessage="We are very sorry, but Robolab does not support this browser. We recommend updating to the latest version of a supported browser such as Google Chrome, Mozilla Firefox, Microsoft Edge, or Apple Safari."
                                 description="Error message when the browser does not work at all (IE)"
                                 id="gui.unsupportedBrowser.description"
                             />
@@ -77,11 +77,11 @@ const BrowserModal = ({intl, ...props}) => {
                                 previewFaqLink: (
                                     <a
                                         className={styles.faqLink}
-                                        href="//openblock.cc/faq"
+                                        href="//www.robolablearn.com/faq"
                                     >
                                         <FormattedMessage
                                             defaultMessage="FAQ"
-                                            description="link to OpenBlock FAQ page"
+                                            description="link to Robolab FAQ page"
                                             id="gui.unsupportedBrowser.previewfaqlinktext"
                                         />
                                     </a>

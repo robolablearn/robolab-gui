@@ -32,7 +32,7 @@ const WebGlModal = ({intl, ...props}) => (
                 <p>
                     { /* eslint-disable max-len */ }
                     <FormattedMessage
-                        defaultMessage="Unfortunately it looks like your browser or computer {webGlLink}. This technology is needed for OpenBlock to run."
+                        defaultMessage="Unfortunately it looks like your browser or computer {webGlLink}. This technology is needed for Robolab to run."
                         description="WebGL missing message"
                         id="gui.webglModal.description"
                         values={{
@@ -69,17 +69,17 @@ const WebGlModal = ({intl, ...props}) => (
                 <div className={styles.faqLinkText}>
                     <FormattedMessage
                         defaultMessage="To learn more, go to the {previewFaqLink}."
-                        description="OpenBlock FAQ description"
+                        description="Robolab FAQ description"
                         id="gui.webglModal.previewfaq"
                         values={{
                             previewFaqLink: (
                                 <a
                                     className={styles.faqLink}
-                                    href="//openblock.cc/faq"
+                                    href="//www.robolablearn.com/faq"
                                 >
                                     <FormattedMessage
                                         defaultMessage="FAQ"
-                                        description="link to OpenBlock FAQ page"
+                                        description="link to Robolab FAQ page"
                                         id="gui.webglModal.previewfaqlinktext"
                                     />
                                 </a>
