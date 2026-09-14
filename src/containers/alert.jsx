@@ -8,6 +8,7 @@ import AlertComponent from '../components/alerts/alert.jsx';
 import {openConnectionModal, openUploadProgress} from '../reducers/modals';
 import {showAlertWithTimeout} from '../reducers/alerts';
 import {manualUpdateProject} from '../reducers/project-state';
+import {isPeripheralOverBluetooth} from '../lib/peripheral-transport';
 
 class Alert extends React.Component {
     constructor (props) {
@@ -22,11 +23,14 @@ class Alert extends React.Component {
         this.props.onCloseAlert(this.props.index);
     }
     handleUploadFirmware () {
-        if (this.props.deviceName) {
+        if (!this.props.deviceName) {
+            this.props.onNoPeripheralIsConnected();
+        } else if (isPeripheralOverBluetooth(this.props.vm, this.props.deviceId)) {
+            // The same rule as the menu bar's button: firmware goes down the cable.
+            this.props.onFirmwareNeedsUsb();
+        } else {
             this.props.vm.uploadFirmwareToPeripheral(this.props.deviceId);
             this.props.onOpenUploadProgress();
-        } else {
-            this.props.onNoPeripheralIsConnected();
         }
         this.handleOnCloseAlert();
     }
@@ -88,6 +92,7 @@ const mapDispatchToProps = dispatch => ({
     },
     onOpenUploadProgress: () => dispatch(openUploadProgress()),
     onNoPeripheralIsConnected: () => showAlertWithTimeout(dispatch, 'connectAPeripheralFirst'),
+    onFirmwareNeedsUsb: () => showAlertWithTimeout(dispatch, 'firmwareNeedsUsb'),
     onSaveNow: () => {
         dispatch(manualUpdateProject());
     }
@@ -105,6 +110,7 @@ Alert.propTypes = {
     level: PropTypes.string.isRequired,
     message: PropTypes.string,
     onCloseAlert: PropTypes.func.isRequired,
+    onFirmwareNeedsUsb: PropTypes.func.isRequired,
     onOpenConnectionModal: PropTypes.func,
     onOpenUploadProgress: PropTypes.func,
     onNoPeripheralIsConnected: PropTypes.func.isRequired,

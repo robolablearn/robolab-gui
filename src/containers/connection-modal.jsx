@@ -121,6 +121,7 @@ class ConnectionModal extends React.Component {
                 connectionSmallIconURL={this.state.device && this.state.device.connectionSmallIconURL}
                 errorMessage={this.state.errorMessage}
                 isSerialport={this.state.device && this.state.device.serialportRequired}
+                bluetoothSupported={Boolean(this.state.device && this.state.device.bluetoothPortsSupported)}
                 isListAll={this.props.isListAll}
                 connectionTipIconURL={this.state.device && this.state.device.connectionTipIconURL}
                 deviceId={this.props.deviceId}

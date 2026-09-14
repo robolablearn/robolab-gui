@@ -265,6 +265,23 @@ class Blocks extends React.Component {
         if (toolboxXML) {
             this.props.updateToolboxState(toolboxXML);
         }
+        this.updateProgramModeDisabledBlocks();
+    }
+    /**
+     * Grey out blocks that do not apply to the current program mode, and
+     * un-grey them on the way back. The toolbox handles its own copies, but
+     * blocks already dropped in the workspace are only reachable from here.
+     */
+    updateProgramModeDisabledBlocks () {
+        if (!this.workspace || !this.props.vm.runtime.getProgramModeBlockDisableMap) return;
+        const disableMap = this.props.vm.runtime.getProgramModeBlockDisableMap();
+        if (Object.keys(disableMap).length === 0) return;
+        this.workspace.getAllBlocks().forEach(block => {
+            if (Object.prototype.hasOwnProperty.call(disableMap, block.type) &&
+                block.disabled !== disableMap[block.type]) {
+                block.setDisabled(disableMap[block.type]);
+            }
+        });
     }
     updateToolbox () {
         this.toolboxUpdateTimeout = false;
@@ -292,6 +309,13 @@ class Blocks extends React.Component {
         const queue = this.toolboxUpdateQueue;
         this.toolboxUpdateQueue = [];
         queue.forEach(fn => fn());
+
+        // The toolbox is rebuilt whenever the device's block info is
+        // regenerated, and the runtime empties _deviceBlockInfo while doing so.
+        // A greying pass that lands in that window sees an empty disable map
+        // and bails, leaving workspace blocks coloured again a moment after the
+        // mode switch -- so re-apply now that the info is back.
+        this.updateProgramModeDisabledBlocks();
     }
 
     withToolboxUpdates (fn) {
@@ -461,6 +485,10 @@ class Blocks extends React.Component {
             log.error(error);
         }
         this.workspace.addChangeListener(this.props.vm.blockListener);
+
+        // Blocks just loaded from a project have not been through a mode
+        // switch, so grey any that do not apply to the mode we are already in.
+        this.updateProgramModeDisabledBlocks();
 
         if (this.props.vm.editingTarget && this.props.workspaceMetrics.targets[this.props.vm.editingTarget.id]) {
             const {scrollX, scrollY, scale} = this.props.workspaceMetrics.targets[this.props.vm.editingTarget.id];
