@@ -7,6 +7,7 @@ import {compose} from 'redux';
 import {defineMessages, injectIntl, intlShape} from 'react-intl';
 
 import analytics from '../lib/analytics';
+import {adoptDeviceSprite} from '../lib/device-default-sprite';
 import {setDeviceData} from '../reducers/device-data';
 
 import {makeDeviceLibrary} from '../lib/libraries/devices/index.jsx';
@@ -52,6 +53,7 @@ class DeviceLibrary extends React.PureComponent {
     constructor (props) {
         super(props);
         bindAll(this, [
+            'adoptSprite',
             'handleItemSelect',
             'requestLoadDevice'
         ]);
@@ -72,6 +74,7 @@ class DeviceLibrary extends React.PureComponent {
         if (id && !device.disabled) {
             if (this.props.vm.extensionManager.isDeviceLoaded(id)) {
                 this.props.onDeviceSelected(id);
+                this.adoptSprite(id);
             } else {
                 this.props.vm.extensionManager.loadDeviceURL(device).then(() => {
                     this.props.vm.extensionManager.getDeviceExtensionsList().then(() => {
@@ -81,6 +84,7 @@ class DeviceLibrary extends React.PureComponent {
                         this.props.vm.installDeviceExtensions(Object.assign([], deviceExtensions));
                     });
                     this.props.onDeviceSelected(id);
+                    this.adoptSprite(id);
                     analytics.event({
                         category: 'devices',
                         action: 'select device',
@@ -92,6 +96,14 @@ class DeviceLibrary extends React.PureComponent {
                     );
             }
         }
+    }
+
+    adoptSprite (id) {
+        // A project about a robot opens with the robot on the stage: the
+        // default sprite becomes the device, if nobody has touched it yet.
+        adoptDeviceSprite(this.props.vm, id).catch(err =>
+            console.error(err) // eslint-disable-line no-console
+        );
     }
 
     handleItemSelect (item) {

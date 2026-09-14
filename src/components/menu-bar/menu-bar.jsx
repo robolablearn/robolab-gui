@@ -9,6 +9,7 @@ import React from 'react';
 
 import VM from 'openblock-vm';
 
+import {DeviceType} from '../../lib/device';
 import Box from '../box/box.jsx';
 import Button from '../button/button.jsx';
 import CommunityButton from './community-button.jsx'; // eslint-disable-line no-unused-vars
@@ -111,6 +112,7 @@ import settingIcon from './icon--setting.svg';
 import uploadFirmwareIcon from './icon--upload-firmware.svg';
 import saveSvgAsPng from 'openblock-save-svg-as-png';
 import {showAlertWithTimeout} from '../../reducers/alerts';
+import {isPeripheralOverBluetooth} from '../../lib/peripheral-transport';
 
 const ariaMessages = defineMessages({
     language: {
@@ -419,8 +421,32 @@ class MenuBar extends React.Component {
             this.props.onSetUploadMode();
         }
     }
+    canUploadFirmware () {
+        if (!this.props.peripheralName) {
+            return false;
+        }
+        // MicroPython boards use this button to flash the board's base MicroPython
+        // firmware image (esptool) -- unrelated to which program mode (Arena/
+        // Upload) is selected, so it's always available once connected.
+        if (this.props.deviceType === DeviceType.microPython) {
+            return true;
+        }
+        // Realtime-capable boards (Arduino) use this button to flash the realtime
+        // interpreter firmware, which is only meaningful in realtime mode. Boards
+        // that only ever support upload mode don't have that mode distinction,
+        // so gate on peripheral connection alone for them.
+        return this.props.isRealtimeMode || !this.props.isSupportSwitchMode;
+    }
     handleUploadFirmware () {
         if (this.props.deviceId) {
+            // Firmware only goes down the USB cable: the chip's bootloader has
+            // no radio. Said here, before the upload window opens, because the
+            // peripheral's own refusal is emitted before that window is
+            // listening, and was never seen -- the window just sat there.
+            if (isPeripheralOverBluetooth(this.props.vm, this.props.deviceId)) {
+                this.props.onFirmwareNeedsUsb();
+                return;
+            }
             this.props.vm.uploadFirmwareToPeripheral(this.props.deviceId);
             this.props.onSetRealtimeConnection(false);
             this.props.onOpenUploadProgress();
@@ -865,9 +891,9 @@ class MenuBar extends React.Component {
                     </div>
                     <Divider className={classNames(styles.divider)} />
                     <div
-                        className={classNames(styles.menuBarItem, this.props.isRealtimeMode &&
-                            this.props.peripheralName ? styles.hoverable : styles.disabled)}
-                        onMouseUp={this.props.isRealtimeMode && this.props.peripheralName ?
+                        className={classNames(styles.menuBarItem, this.canUploadFirmware() ?
+                            styles.hoverable : styles.disabled)}
+                        onMouseUp={this.canUploadFirmware() ?
                             this.handleUploadFirmware : null}
                     >
                         <img
@@ -883,27 +909,70 @@ class MenuBar extends React.Component {
                         />}
                     </div>
                     <Divider className={classNames(styles.divider)} />
-                    <div className={classNames(styles.menuBarItem, styles.programModeGroup)}>
-                        <FormattedMessage
-                            defaultMessage="Program Mode"
-                            description="Button to switch to upload mode"
-                            id="gui.menu-bar.programMode"
-                        />
-                        <Switch
-                            className={styles.programModeSwitch}
-                            onChange={this.handleProgramModeSwitchOnChange}
-                            checked={!this.props.isRealtimeMode}
-                            disabled={this.props.isToolboxUpdating || !this.props.isSupportSwitchMode}
-                            height={25}
-                            width={45}
-                            onColor={this.props.isToolboxUpdating ||
-                                !this.props.isSupportSwitchMode ? '#888888' : '#008800'}
-                            offColor={this.props.isToolboxUpdating ||
-                                !this.props.isSupportSwitchMode ? '#888888' : '#FF8C1A'}
-                            uncheckedIcon={false}
-                            checkedIcon={false}
-                        />
-                    </div>
+                    {this.props.deviceId === 'mieo' ? (
+                        <div className={classNames(styles.menuBarItem, styles.programModeGroup)}>
+                            <span
+                                style={{
+                                    marginRight: '0.5rem',
+                                    fontWeight: this.props.isRealtimeMode ? 'bold' : 'normal'
+                                }}
+                            >
+                                <FormattedMessage
+                                    defaultMessage="Arena"
+                                    description="Label for the realtime program mode on the Mieo device"
+                                    id="gui.menu-bar.programModeArena"
+                                />
+                            </span>
+                            <Switch
+                                className={styles.programModeSwitch}
+                                onChange={this.handleProgramModeSwitchOnChange}
+                                checked={!this.props.isRealtimeMode}
+                                disabled={this.props.isToolboxUpdating || !this.props.isSupportSwitchMode}
+                                height={25}
+                                width={45}
+                                onColor={this.props.isToolboxUpdating ||
+                                    !this.props.isSupportSwitchMode ? '#888888' : '#008800'}
+                                offColor={this.props.isToolboxUpdating ||
+                                    !this.props.isSupportSwitchMode ? '#888888' : '#FF8C1A'}
+                                uncheckedIcon={false}
+                                checkedIcon={false}
+                            />
+                            <span
+                                style={{
+                                    marginLeft: '0.5rem',
+                                    fontWeight: this.props.isRealtimeMode ? 'normal' : 'bold'
+                                }}
+                            >
+                                <FormattedMessage
+                                    defaultMessage="Upload"
+                                    description="Label for the upload program mode on the Mieo device"
+                                    id="gui.menu-bar.programModeUpload"
+                                />
+                            </span>
+                        </div>
+                    ) : (
+                        <div className={classNames(styles.menuBarItem, styles.programModeGroup)}>
+                            <FormattedMessage
+                                defaultMessage="Program Mode"
+                                description="Button to switch to upload mode"
+                                id="gui.menu-bar.programMode"
+                            />
+                            <Switch
+                                className={styles.programModeSwitch}
+                                onChange={this.handleProgramModeSwitchOnChange}
+                                checked={!this.props.isRealtimeMode}
+                                disabled={this.props.isToolboxUpdating || !this.props.isSupportSwitchMode}
+                                height={25}
+                                width={45}
+                                onColor={this.props.isToolboxUpdating ||
+                                    !this.props.isSupportSwitchMode ? '#888888' : '#008800'}
+                                offColor={this.props.isToolboxUpdating ||
+                                    !this.props.isSupportSwitchMode ? '#888888' : '#FF8C1A'}
+                                uncheckedIcon={false}
+                                checkedIcon={false}
+                            />
+                        </div>
+                    )}
                     {isScratchDesktop() ? (
                         <div
                             className={classNames(styles.menuBarItem, styles.hoverable, {
@@ -1020,6 +1089,7 @@ MenuBar.propTypes = {
     onClickCheckUpdate: PropTypes.func,
     onClickClearCache: PropTypes.func,
     onClickInstallDriver: PropTypes.func,
+    onFirmwareNeedsUsb: PropTypes.func.isRequired,
     onClickDownloadTools: PropTypes.func,
     onLogOut: PropTypes.func,
     onNoPeripheralIsConnected: PropTypes.func.isRequired,
@@ -1062,6 +1132,7 @@ MenuBar.propTypes = {
     onSetStageLarge: PropTypes.func.isRequired,
     deviceId: PropTypes.string,
     deviceName: PropTypes.string,
+    deviceType: PropTypes.string,
     onDeviceIsEmpty: PropTypes.func
 };
 
@@ -1099,7 +1170,8 @@ const mapStateToProps = (state, ownProps) => {
         vm: state.scratchGui.vm,
         peripheralName: state.scratchGui.connectionModal.peripheralName,
         deviceId: state.scratchGui.device.deviceId,
-        deviceName: state.scratchGui.device.deviceName
+        deviceName: state.scratchGui.device.deviceName,
+        deviceType: state.scratchGui.device.deviceType
     };
 };
 
@@ -1143,6 +1215,7 @@ const mapDispatchToProps = dispatch => ({
         dispatch(openUpdateModal());
     },
     onNoPeripheralIsConnected: () => showAlertWithTimeout(dispatch, 'connectAPeripheralFirst'),
+    onFirmwareNeedsUsb: () => showAlertWithTimeout(dispatch, 'firmwareNeedsUsb'),
     onWorkspaceIsEmpty: () => showAlertWithTimeout(dispatch, 'workspaceIsEmpty'),
     onWorkspaceIsNotEmpty: () => showAlertWithTimeout(dispatch, 'workspaceIsNotEmpty'),
     onOpenDeviceLibrary: () => dispatch(openDeviceLibrary()),
