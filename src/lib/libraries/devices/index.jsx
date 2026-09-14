@@ -148,13 +148,13 @@ const deviceData = [
     {
         name: 'Mieo',
         deviceId: 'mieo',
-        manufactor: 'your-manufacturer',
-        learnMore: 'https://your-device-docs-link',
-        type: DeviceType.arduino,
+        manufactor: 'espressif',
+        learnMore: 'https://docs.micropython.org/en/latest/esp32/tutorial/intro.html',
+        type: DeviceType.microPython,
         iconURL: mieoIconURL,
         description: (
             <FormattedMessage
-                defaultMessage="A custom Arduino-compatible board."
+                defaultMessage="The Mieo board, running MicroPython with a beginner-friendly Python workflow."
                 description="Description for the Mieo device"
                 id="gui.device.mieo.description"
             />
@@ -163,7 +163,11 @@ const deviceData = [
         disabled: false,
         bluetoothRequired: false,
         serialportRequired: true,
-        defaultBaudRate: '9600',
+        // Also reachable over Bluetooth, so the connection window offers a
+        // tab for it. Firmware still has to go down the cable -- the chip's
+        // bootloader has no radio -- so this does not replace the USB tab.
+        bluetoothPortsSupported: true,
+        defaultBaudRate: '115200',
         internetConnectionRequired: false,
         launchPeripheralConnectionFlow: true,
         useAutoScan: false,
@@ -176,10 +180,11 @@ const deviceData = [
                 id="gui.device.connectingMessage"
             />
         ),
-        programMode: ['realtime', 'upload'],
-        programLanguage: ['block', 'c', 'cpp'],
-        tags: ['arduino'],
-        helpLink: 'https://your-device-help-link'
+        programMode: ['upload', 'realtime'],
+        defaultProgramMode: 'realtime',
+        programLanguage: ['block', 'microPython'],
+        tags: ['microPython'],
+        helpLink: 'https://docs.micropython.org/en/latest/esp32/tutorial/intro.html'
     },
     {
         name: 'Arduino Nano',
