@@ -16,8 +16,28 @@ import text2speechInsetIconURL from './text2speech/text2speech-small.svg';
 import translateIconURL from './translate/translate.png';
 import translateInsetIconURL from './translate/translate-small.png';
 
-import makeymakeyIconURL from './makeymakey/makeymakey.png';
-import makeymakeyInsetIconURL from './makeymakey/makeymakey-small.svg';
+import faceSenseIconURL from './faceSense/face-sense.svg';
+import faceSenseInsetIconURL from './faceSense/face-sense-small.svg';
+import objectSenseIconURL from './objectSense/object-sense.svg';
+import objectSenseInsetIconURL from './objectSense/object-sense-small.svg';
+import bodySenseIconURL from './bodySense/body-sense.svg';
+import bodySenseInsetIconURL from './bodySense/body-sense-small.svg';
+import speechSenseIconURL from './speechSense/speech-sense.svg';
+import speechSenseInsetIconURL from './speechSense/speech-sense-small.svg';
+import scanSenseIconURL from './scanSense/scan-sense.svg';
+import scanSenseInsetIconURL from './scanSense/scan-sense-small.svg';
+import weatherSenseIconURL from './weatherSense/weather-sense.svg';
+import weatherSenseInsetIconURL from './weatherSense/weather-sense-small.svg';
+import iotCloudIconURL from './iotCloud/iot-cloud.svg';
+import iotCloudInsetIconURL from './iotCloud/iot-cloud-small.svg';
+import visionSenseIconURL from './visionSense/vision-sense.svg';
+import visionSenseInsetIconURL from './visionSense/vision-sense-small.svg';
+
+// Makey Makey is not offered: Robolab ships one board, and turning a banana
+// into a key is not part of it. Left commented rather than deleted, like the
+// LEGO extensions below, so putting it back is a one-line job.
+// import makeymakeyIconURL from './makeymakey/makeymakey.png';
+// import makeymakeyInsetIconURL from './makeymakey/makeymakey-small.svg';
 
 // import ev3IconURL from './ev3/ev3.png';
 // import ev3InsetIconURL from './ev3/ev3-small.svg';
@@ -100,7 +120,8 @@ export default [
                 id="gui.extension.videosensing.description"
             />
         ),
-        featured: true
+        featured: true,
+        tags: ['ai&ml']
     },
     {
         name: (
@@ -122,7 +143,8 @@ export default [
             />
         ),
         featured: true,
-        internetConnectionRequired: true
+        internetConnectionRequired: true,
+        tags: ['ai&ml']
     },
     {
         name: (
@@ -144,28 +166,178 @@ export default [
             />
         ),
         featured: true,
-        internetConnectionRequired: true
+        internetConnectionRequired: true,
+        tags: ['ai&ml']
     },
     {
         name: (
             <FormattedMessage
-                defaultMessage="Makey Makey"
-                description="Name for the Makey Makey extension"
-                id="gui.extension.makeymakey.name"
+                defaultMessage="Face Sense"
+                description="Name for the Face Sense extension"
+                id="gui.extension.faceSense.name"
             />
         ),
-        extensionId: 'makeymakey',
-        collaborator: 'JoyLabz',
-        iconURL: makeymakeyIconURL,
-        insetIconURL: makeymakeyInsetIconURL,
+        extensionId: 'faceSense',
+        iconURL: faceSenseIconURL,
+        insetIconURL: faceSenseInsetIconURL,
         description: (
             <FormattedMessage
-                defaultMessage="Make anything into a key."
-                description="Description for the 'Makey Makey' extension"
-                id="gui.extension.makeymakey.description"
+                defaultMessage="Find faces, read expressions, and tell people apart."
+                description="Description for the Face Sense extension"
+                id="gui.extension.faceSense.description"
             />
         ),
-        featured: true
+        featured: true,
+        tags: ['ai&ml']
+    },
+    {
+        name: (
+            <FormattedMessage
+                defaultMessage="Object Sense"
+                description="Name for the Object Sense extension"
+                id="gui.extension.objectSense.name"
+            />
+        ),
+        extensionId: 'objectSense',
+        iconURL: objectSenseIconURL,
+        insetIconURL: objectSenseInsetIconURL,
+        description: (
+            <FormattedMessage
+                defaultMessage="Spot everyday things through the camera and say what they are."
+                description="Description for the Object Sense extension"
+                id="gui.extension.objectSense.description"
+            />
+        ),
+        featured: true,
+        tags: ['ai&ml']
+    },
+    {
+        name: (
+            <FormattedMessage
+                defaultMessage="Body Sense"
+                description="Name for the Body Sense extension"
+                id="gui.extension.bodySense.name"
+            />
+        ),
+        extensionId: 'bodySense',
+        iconURL: bodySenseIconURL,
+        insetIconURL: bodySenseInsetIconURL,
+        description: (
+            <FormattedMessage
+                defaultMessage="Follow people's poses and hands through the camera."
+                description="Description for the Body Sense extension"
+                id="gui.extension.bodySense.description"
+            />
+        ),
+        featured: true,
+        tags: ['ai&ml']
+    },
+    {
+        name: (
+            <FormattedMessage
+                defaultMessage="Speech Sense"
+                description="Name for the Speech Sense extension"
+                id="gui.extension.speechSense.name"
+            />
+        ),
+        extensionId: 'speechSense',
+        iconURL: speechSenseIconURL,
+        insetIconURL: speechSenseInsetIconURL,
+        description: (
+            <FormattedMessage
+                defaultMessage="Turn what you say into words your project can use."
+                description="Description for the Speech Sense extension"
+                id="gui.extension.speechSense.description"
+            />
+        ),
+        featured: true,
+        tags: ['ai&ml']
+    },
+    {
+        name: (
+            <FormattedMessage
+                defaultMessage="Scan Sense"
+                description="Name for the Scan Sense extension"
+                id="gui.extension.scanSense.name"
+            />
+        ),
+        extensionId: 'scanSense',
+        iconURL: scanSenseIconURL,
+        insetIconURL: scanSenseInsetIconURL,
+        description: (
+            <FormattedMessage
+                defaultMessage="Read QR codes with the camera or on the stage."
+                description="Description for the Scan Sense extension"
+                id="gui.extension.scanSense.description"
+            />
+        ),
+        featured: true,
+        tags: ['ai&ml']
+    },
+    {
+        name: (
+            <FormattedMessage
+                defaultMessage="Weather Sense"
+                description="Name for the Weather Sense extension"
+                id="gui.extension.weatherSense.name"
+            />
+        ),
+        extensionId: 'weatherSense',
+        iconURL: weatherSenseIconURL,
+        insetIconURL: weatherSenseInsetIconURL,
+        description: (
+            <FormattedMessage
+                defaultMessage="Weather now and forecasts for any city, from OpenWeather. Needs a free key."
+                description="Description for the Weather Sense extension"
+                id="gui.extension.weatherSense.description"
+            />
+        ),
+        featured: true,
+        internetConnectionRequired: true,
+        tags: ['iot']
+    },
+    {
+        name: (
+            <FormattedMessage
+                defaultMessage="IoT Cloud"
+                description="Name for the IoT Cloud extension"
+                id="gui.extension.iotCloud.name"
+            />
+        ),
+        extensionId: 'iotCloud',
+        iconURL: iotCloudIconURL,
+        insetIconURL: iotCloudInsetIconURL,
+        description: (
+            <FormattedMessage
+                defaultMessage="Send values to ThingSpeak channels and read them back."
+                description="Description for the IoT Cloud extension"
+                id="gui.extension.iotCloud.description"
+            />
+        ),
+        featured: true,
+        internetConnectionRequired: true,
+        tags: ['iot']
+    },
+    {
+        name: (
+            <FormattedMessage
+                defaultMessage="Vision Sense"
+                description="Name for the Vision Sense extension"
+                id="gui.extension.visionSense.name"
+            />
+        ),
+        extensionId: 'visionSense',
+        iconURL: visionSenseIconURL,
+        insetIconURL: visionSenseInsetIconURL,
+        description: (
+            <FormattedMessage
+                defaultMessage="Find objects, label pictures and read printed text from the camera, the stage or a web picture."
+                description="Description for the Vision Sense extension"
+                id="gui.extension.visionSense.description"
+            />
+        ),
+        featured: true,
+        tags: ['ai&ml']
     }
     // {
     //     name: 'LEGO MINDSTORMS EV3',

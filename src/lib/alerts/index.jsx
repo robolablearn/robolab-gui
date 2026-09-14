@@ -304,6 +304,21 @@ const alerts = [
         maxDisplaySecs: 5
     },
     {
+        alertId: 'firmwareNeedsUsb',
+        alertType: AlertTypes.STANDARD,
+        clearList: ['firmwareNeedsUsb'],
+        closeButton: true,
+        content: (
+            <FormattedMessage
+                defaultMessage="Firmware can only be uploaded through a USB cable. Connect the board with USB, choose its COM port, then upload the firmware." // eslint-disable-line max-len
+                description="Message shown when trying to upload firmware while the board is connected over Bluetooth"
+                id="gui.alerts.firmwareNeedsUsb"
+            />
+        ),
+        level: AlertLevels.WARN,
+        maxDisplaySecs: 8
+    },
+    {
         alertId: 'codeEditorIsLocked',
         alertType: AlertTypes.STANDARD,
         clearList: ['codeEditorIsLocked', 'codeEditorIsUnlocked'],

@@ -4,6 +4,13 @@ import bindAll from 'lodash.bindall';
 import ScanningStepComponent from '../components/connection-modal/scanning-step.jsx';
 import VM from 'openblock-vm';
 
+/**
+ * How a Bluetooth board's id is told apart from a serial port's.
+ * Matches BLE_PREFIX in openblock-vm's mieo-ble.
+ * @readonly
+ */
+const BLE_PREFIX = 'ble:';
+
 class ScanningStep extends React.Component {
     constructor (props) {
         super(props);
@@ -11,11 +18,14 @@ class ScanningStep extends React.Component {
             'handlePeripheralListUpdate',
             'handlePeripheralScanTimeout',
             'handleClickListAll',
-            'handleRefresh'
+            'handleRefresh',
+            'handleSelectSerialTab',
+            'handleSelectBluetoothTab'
         ]);
         this.state = {
             scanning: true,
-            peripheralList: []
+            peripheralList: [],
+            activeTab: 'serial'
         };
     }
     componentDidMount () {
@@ -36,10 +46,16 @@ class ScanningStep extends React.Component {
         this.props.vm.scanForPeripheral(this.props.deviceId, listAll);
     }
     handlePeripheralScanTimeout () {
-        this.setState({
-            scanning: false,
-            peripheralList: []
-        });
+        // Whatever has already been found stays on screen. The timeout comes
+        // from the serial scan, and throwing away a Bluetooth board that was
+        // found perfectly well because no cable turned up would be daft.
+        this.setState({scanning: false});
+    }
+    handleSelectSerialTab () {
+        this.setState({activeTab: 'serial'});
+    }
+    handleSelectBluetoothTab () {
+        this.setState({activeTab: 'bluetooth'});
     }
     handlePeripheralListUpdate (newList) {
         // TODO: sort peripherals by signal strength? so they don't jump around
@@ -64,12 +80,19 @@ class ScanningStep extends React.Component {
         });
     }
     render () {
+        const isBluetooth = peripheral => String(peripheral.peripheralId).startsWith(BLE_PREFIX);
+        const bluetoothList = this.state.peripheralList.filter(isBluetooth);
+        const serialList = this.state.peripheralList.filter(p => !isBluetooth(p));
+
         return (
             <ScanningStepComponent
+                activeTab={this.state.activeTab}
+                bluetoothList={bluetoothList}
+                bluetoothSupported={this.props.bluetoothSupported}
                 connectionSmallIconURL={this.props.connectionSmallIconURL}
                 isSerialport={this.props.isSerialport}
                 isListAll={this.props.isListAll}
-                peripheralList={this.state.peripheralList}
+                serialList={serialList}
                 phase={this.state.phase}
                 scanning={this.state.scanning}
                 title={this.props.deviceId}
@@ -77,12 +100,15 @@ class ScanningStep extends React.Component {
                 onConnecting={this.props.onConnecting}
                 onClickListAll={this.handleClickListAll}
                 onRefresh={this.handleRefresh}
+                onSelectSerialTab={this.handleSelectSerialTab}
+                onSelectBluetoothTab={this.handleSelectBluetoothTab}
             />
         );
     }
 }
 
 ScanningStep.propTypes = {
+    bluetoothSupported: PropTypes.bool,
     connectionSmallIconURL: PropTypes.string,
     isSerialport: PropTypes.bool.isRequired,
     isListAll: PropTypes.bool.isRequired,

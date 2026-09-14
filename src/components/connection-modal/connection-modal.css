@@ -31,6 +31,63 @@
     height: 100%;
 }
 
+/* Tabs across the top of the device list, one per way of reaching a board. */
+.tab-row {
+    display: flex;
+    flex-direction: row;
+    /* Centred: there are only two tabs and the modal is wide, so left-aligning
+       them left a conspicuous gap on the right. */
+    justify-content: center;
+    align-items: flex-end;
+    gap: 0.25rem;
+    padding: 0 0.5rem;
+    border-bottom: 1px solid $ui-black-transparent;
+}
+
+.tab {
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+    padding: 0.5rem 1rem;
+    border: 1px solid transparent;
+    border-bottom: none;
+    border-radius: 0.35rem 0.35rem 0 0;
+    background: transparent;
+    color: $text-primary;
+    font-size: 0.875rem;
+    font-family: inherit;
+    cursor: pointer;
+    /* Sits on the row's border so the active tab can cover it. */
+    margin-bottom: -1px;
+}
+
+.tab:hover {
+    background: $ui-black-transparent;
+}
+
+.tab-active {
+    background: $ui-white;
+    border-color: $ui-black-transparent;
+    border-bottom-color: $ui-white;
+    font-weight: bold;
+}
+
+.tab-active:hover {
+    background: $ui-white;
+}
+
+/* How many boards this tab is holding, so the other tab is not a guess. */
+.tab-count {
+    min-width: 1.1rem;
+    padding: 0 0.3rem;
+    border-radius: 0.6rem;
+    background: $motion-primary;
+    color: $ui-white;
+    font-size: 0.7rem;
+    line-height: 1.1rem;
+    text-align: center;
+}
+
 .peripheral-tile {
     display: flex;
     flex-direction: row;
@@ -48,6 +105,14 @@
 .peripheral-tile-name {
     display: flex;
     align-items: center;
+
+    /* The tile is a fixed height with the Connect button beside it, so a name
+       longer than the row -- a board named after itself and its address, say --
+       has to be trimmed rather than allowed to wrap and push the button out.
+       min-width lets the flex item shrink below its text, which it will not do
+       on its own. */
+    min-width: 0;
+    margin-right: 0.5rem;
 }
 
 [dir="ltr"] .peripheral-tile-image {
@@ -63,6 +128,7 @@
     flex-direction: column;
     justify-content: center;
     align-items: flex-start;
+    min-width: 0;
 }
 
 .peripheral-tile-name-label {
@@ -72,6 +138,10 @@
 
 .peripheral-tile-name-text {
     font-size: 0.875rem;
+    max-width: 100%;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
 }
 
 .peripheral-tile button {
@@ -216,6 +286,9 @@
 .peripheral-tile-widgets {
     display: flex;
     align-items: center;
+
+    /* The Connect button keeps its size whatever the name beside it is doing. */
+    flex-shrink: 0;
 }
 
 .body-head-area {

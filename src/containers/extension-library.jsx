@@ -25,45 +25,43 @@ const messages = defineMessages({
         description: 'Prompt for unoffical extension url',
         id: 'gui.extensionLibrary.extensionUrl'
     },
-    shieldTag: {
-        id: 'gui.library.shieldTag',
-        defaultMessage: 'Shield',
-        description: 'Shield tag to filter all shield libraries.'
+    robotTag: {
+        id: 'gui.library.robotTag',
+        defaultMessage: 'Robot',
+        description: 'Robot tag to filter all robot libraries.'
     },
-    actuatorTag: {
-        id: 'gui.library.actuatorTag',
-        defaultMessage: 'Actuator',
-        description: 'Actuator tag to filter all actuator libraries.'
+    hardwareTag: {
+        id: 'gui.library.hardwareTag',
+        defaultMessage: 'Hardware',
+        description: 'Hardware tag to filter all hardware libraries.'
     },
-    sensorTag: {
-        id: 'gui.library.sensorTag',
-        defaultMessage: 'Sensor',
-        description: 'Sensor tag to filter all sensor libraries.'
+    aiMlTag: {
+        id: 'gui.library.aiMlTag',
+        defaultMessage: 'AI&ML',
+        description: 'AI&ML tag to filter all AI and machine learning libraries.'
     },
-    displayTag: {
-        id: 'gui.library.displayTag',
-        defaultMessage: 'Display',
-        description: 'Display tag to filter all display libraries.'
-    },
-    communicationTag: {
-        id: 'gui.library.communicationTag',
-        defaultMessage: 'Communication',
-        description: 'Communication tag to filter all communication libraries.'
-    },
-    otherTag: {
-        id: 'gui.library.otherTag',
-        defaultMessage: 'Other',
-        description: 'Other tag to filter all other libraries.'
+    iotTag: {
+        id: 'gui.library.iotTag',
+        defaultMessage: 'IoT',
+        description: 'IoT tag to filter extensions that use internet services.'
     }
 });
 
-const SHIELD_TAG = {tag: 'shield', intlLabel: messages.shieldTag};
-const ACTUATOR_TAG = {tag: 'actuator', intlLabel: messages.actuatorTag};
-const SENSOR_TAG = {tag: 'sensor', intlLabel: messages.sensorTag};
-const DISPLAY_TAG = {tag: 'display', intlLabel: messages.displayTag};
-const COMMUNICATION_TAG = {tag: 'communication', intlLabel: messages.communicationTag};
-const OTHER_TAG = {tag: 'other', intlLabel: messages.otherTag};
-const tagListPrefix = [SHIELD_TAG, ACTUATOR_TAG, SENSOR_TAG, DISPLAY_TAG, COMMUNICATION_TAG, OTHER_TAG];
+const ROBOT_TAG = {tag: 'robot', intlLabel: messages.robotTag};
+const HARDWARE_TAG = {tag: 'hardware', intlLabel: messages.hardwareTag};
+const AI_ML_TAG = {tag: 'ai&ml', intlLabel: messages.aiMlTag};
+const IOT_TAG = {tag: 'iot', intlLabel: messages.iotTag};
+
+/**
+ * The categories an extension can be filed under.
+ *
+ * "All" is not here: the library component puts it in front of whatever it is
+ * given, so adding it would show it twice.
+ *
+ * An extension with no tag still appears, but only under All -- which is where
+ * the editor utilities sit, because they are not any of these four things.
+ */
+const tagListPrefix = [ROBOT_TAG, HARDWARE_TAG, AI_ML_TAG, IOT_TAG];
 
 class ExtensionLibrary extends React.PureComponent {
     constructor (props) {
@@ -180,7 +178,7 @@ class ExtensionLibrary extends React.PureComponent {
                 autoClose={false}
                 data={extensionLibraryThumbnailData}
                 filterable
-                tags={this.props.isRealtimeMode ? [] : tagListPrefix}
+                tags={tagListPrefix}
                 id="extensionLibrary"
                 isUnloadble
                 title={this.props.intl.formatMessage(messages.extensionTitle)}
