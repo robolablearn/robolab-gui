@@ -38,6 +38,7 @@ class LibraryItem extends React.PureComponent {
     }
     componentWillUnmount () {
         clearInterval(this.intervalId);
+        this._unmounted = true;
     }
     handleBlur (id) {
         this.handleMouseLeave(id);
@@ -50,7 +51,17 @@ class LibraryItem extends React.PureComponent {
                         isProcessing: true
                     });
                 }
-                this.props.onSelect(this.props.id);
+                // isProcessing used to clear only when isLoaded changed, so an
+                // extension that failed to load left the item saying
+                // "Processing..." forever. Settling on the selection itself
+                // covers the failure case too.
+                Promise.resolve(this.props.onSelect(this.props.id))
+                    .catch(() => {})
+                    .then(() => {
+                        if (!this._unmounted) {
+                            this.setState({isProcessing: false});
+                        }
+                    });
             }
         }
         e.preventDefault();

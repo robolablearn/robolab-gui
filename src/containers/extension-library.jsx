@@ -10,6 +10,7 @@ import {connect} from 'react-redux';
 import {defineMessages, injectIntl, intlShape} from 'react-intl';
 
 import extensionLibraryContent from '../lib/libraries/extensions/index.jsx';
+import {showAlertWithTimeout} from '../reducers/alerts';
 
 import LibraryComponent from '../components/library/library.jsx';
 import extensionIcon from '../components/action-menu/icon--sprite.svg';
@@ -117,14 +118,26 @@ class ExtensionLibrary extends React.PureComponent {
                     this.props.vm.extensionManager.unloadExtension(url);
                     this.updateScratchExtensions();
                 } else {
-                    this.props.vm.extensionManager.loadExtensionURL(url).then(() => {
-                        this.updateScratchExtensions();
-                        analytics.event({
-                            category: 'extensions',
-                            action: 'select extension',
-                            label: id
+                    // Promise.resolve().then() so that a synchronous throw from
+                    // loadExtensionURL lands in the catch below rather than
+                    // escaping handleItemSelect entirely.
+                    return Promise.resolve()
+                        .then(() => this.props.vm.extensionManager.loadExtensionURL(url))
+                        .then(() => {
+                            this.updateScratchExtensions();
+                            analytics.event({
+                                category: 'extensions',
+                                action: 'select extension',
+                                label: id
+                            });
+                        })
+                        .catch(err => {
+                            // Without this the editor sat on "Processing..."
+                            // forever and said nothing.
+                            console.error(err); // eslint-disable-line no-console
+                            this.props.onExtensionLoadError();
+                            this.updateScratchExtensions();
                         });
-                    });
                 }
             }
         } else if (id && !item.disabled) {
@@ -132,7 +145,7 @@ class ExtensionLibrary extends React.PureComponent {
                 this.props.vm.extensionManager.unloadDeviceExtension(id);
                 this.updateDeviceExtensions();
             } else {
-                this.props.vm.extensionManager.loadDeviceExtension(id).then(() => {
+                return this.props.vm.extensionManager.loadDeviceExtension(id).then(() => {
                     this.updateDeviceExtensions();
                     analytics.event({
                         category: 'extensions',
@@ -141,8 +154,9 @@ class ExtensionLibrary extends React.PureComponent {
                     });
                 })
                     .catch(err => {
-                        // TODO add a alet device extension load failed. and change the state to bar to failed state
                         console.error(err); // eslint-disable-line no-console
+                        this.props.onExtensionLoadError();
+                        this.updateDeviceExtensions();
                     });
             }
         }
@@ -191,6 +205,7 @@ class ExtensionLibrary extends React.PureComponent {
 }
 
 ExtensionLibrary.propTypes = {
+    onExtensionLoadError: PropTypes.func.isRequired,
     deviceData: PropTypes.instanceOf(Array).isRequired,
     deviceId: PropTypes.string,
     intl: intlShape.isRequired,
@@ -206,9 +221,14 @@ const mapStateToProps = state => ({
     isRealtimeMode: state.scratchGui.programMode.isRealtimeMode
 });
 
+const mapDispatchToProps = dispatch => ({
+    onExtensionLoadError: () => showAlertWithTimeout(dispatch, 'extensionLoadError')
+});
+
 export default compose(
     injectIntl,
     connect(
-        mapStateToProps
+        mapStateToProps,
+        mapDispatchToProps
     )
 )(ExtensionLibrary);

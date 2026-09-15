@@ -304,6 +304,21 @@ const alerts = [
         maxDisplaySecs: 5
     },
     {
+        alertId: 'extensionLoadError',
+        alertType: AlertTypes.STANDARD,
+        clearList: ['extensionLoadError'],
+        closeButton: true,
+        content: (
+            <FormattedMessage
+                defaultMessage="That extension could not be loaded. If it uses the camera or microphone, check that this app is allowed to use them, then try again." // eslint-disable-line max-len
+                description="Message shown when an extension fails to load"
+                id="gui.alerts.extensionLoadError"
+            />
+        ),
+        level: AlertLevels.WARN,
+        maxDisplaySecs: 8
+    },
+    {
         alertId: 'firmwareNeedsUsb',
         alertType: AlertTypes.STANDARD,
         clearList: ['firmwareNeedsUsb'],
