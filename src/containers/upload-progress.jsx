@@ -47,6 +47,7 @@ class UploadProgress extends React.Component {
         this.state = {
             extension: this.props.deviceData.find(dev => dev.deviceId === props.deviceId),
             phase: PHASES.uploading,
+            progress: null,
             peripheralName: null,
             abortEnabled: false,
             text: '',
@@ -61,6 +62,7 @@ class UploadProgress extends React.Component {
             label: this.props.deviceId
         });
         this.scrollableRef = React.createRef();
+        this.progressText = '';
     }
     componentDidMount () {
         this.props.vm.on('PERIPHERAL_UPLOAD_STDOUT', this.handleStdout);
@@ -94,8 +96,12 @@ class UploadProgress extends React.Component {
         });
     }
     handleStdout (data) {
+        this.progressText = `${this.progressText}${data.message}`.slice(-200);
+        const progressMatches = this.progressText.match(/(\d{1,3}(?:\.\d+)?)\s*%/g);
+        const progress = progressMatches ? Number(progressMatches[progressMatches.length - 1].match(/\d+(?:\.\d+)?/)[0]) : null;
         this.setState({
-            text: this.state.text + data.message
+            text: this.state.text + data.message,
+            progress: progress === null ? this.state.progress : Math.min(99, progress)
         });
         this.scrollableRef.current.scrollToBottom();
         clearTimeout(this.uploadTimeout);
@@ -139,7 +145,8 @@ class UploadProgress extends React.Component {
             });
         } else {
             this.setState({
-                phase: PHASES.success
+                phase: PHASES.success,
+                progress: 100
             });
             this.props.onUploadSuccess();
         }
@@ -184,6 +191,7 @@ class UploadProgress extends React.Component {
                 name={this.state.extension && this.state.extension.name}
                 abortEnabled={this.state.abortEnabled}
                 autoCloseCount={this.state.autoCloseCount}
+                progress={this.state.progress}
                 onAbort={this.handleAbort}
                 onCancel={this.handleCancel}
                 onHelp={this.handleHelp}
