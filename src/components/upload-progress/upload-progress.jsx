@@ -47,6 +47,17 @@ const UploadProgressComponent = props => (
                     </Ansi>
                 </ScrollableFeed>
             </Box>
+            <div
+                aria-label={props.progress === null ? 'Upload in progress' : `Upload ${props.progress}%`}
+                className={classNames(styles.progressRing, props.progress === null && styles.indeterminate)}
+                role="progressbar"
+                aria-valuemin="0"
+                aria-valuemax="100"
+                aria-valuenow={props.progress === null ? undefined : props.progress}
+                style={props.progress === null ? null : {'--progress': `${props.progress * 3.6}deg`}}
+            >
+                <span>{props.progress === null ? '...' : `${props.progress}%`}</span>
+            </div>
             <Dots
                 className={styles.bottomAreaItem}
                 counter={0}
@@ -129,6 +140,7 @@ UploadProgressComponent.propTypes = {
     name: PropTypes.node,
     abortEnabled: PropTypes.bool.isRequired,
     autoCloseCount: PropTypes.number.isRequired,
+    progress: PropTypes.number,
     onAbort: PropTypes.func.isRequired,
     onCancel: PropTypes.func.isRequired,
     onHelp: PropTypes.func.isRequired,
